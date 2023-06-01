@@ -10,7 +10,7 @@
 #define DOWN_KEY 0x28     // The key to move down, default = 0x28 (down arrow)
 #define FALL_KEY 0x20     // The key to fall, default = 0x20 (spacebar)
 
-#define FALL_DELAY 500    // The delay between each fall, default = 500
+#define FALL_DELAY 300    // The delay between each fall, default = 500
 #define RENDER_DELAY 100  // The delay between each frame, default = 100
 
 #define LEFT_FUNC() GetAsyncKeyState(LEFT_KEY) & 0x8000
@@ -19,7 +19,7 @@
 #define DOWN_FUNC() GetAsyncKeyState(DOWN_KEY) & 0x8000
 #define FALL_FUNC() GetAsyncKeyState(FALL_KEY) & 0x8000
 
-#define CANVAS_WIDTH 10
+#define CANVAS_WIDTH 15
 #define CANVAS_HEIGHT 20
 
 typedef enum {
@@ -61,7 +61,7 @@ typedef struct
     ShapeId queue[4];
 }State;
 
-typedef struct {
+typedef struct block {
     Color color;
     ShapeId shape;
     bool current;
@@ -321,6 +321,7 @@ bool move(Block canvas[CANVAS_HEIGHT][CANVAS_WIDTH], int originalX, int original
 
 void printCanvas(Block canvas[CANVAS_HEIGHT][CANVAS_WIDTH], State* state)
 {
+    
     printf("\033[0;0H\n");
     for (int i = 0; i < CANVAS_HEIGHT; i++) {
         printf("|");
@@ -331,12 +332,14 @@ void printCanvas(Block canvas[CANVAS_HEIGHT][CANVAS_WIDTH], State* state)
     }
 
     Shape shapeData = shapes[state->queue[1]];
-    printf("\033[%d;%dHNext:", 3, CANVAS_WIDTH * 2 + 5);
+    printf("\033[%d;%dHNext:", 5, CANVAS_WIDTH * 2 + 5);
+    
     for (int i = 1; i <= 3; i++)
     {
         shapeData = shapes[state->queue[i]];
+        
         for (int j = 0; j < 4; j++) {
-            printf("\033[%d;%dH", i * 4 + j, CANVAS_WIDTH * 2 + 15);
+            printf("\033[%d;%dH", i * 6 + j, CANVAS_WIDTH * 2 + 15);
             for (int k = 0; k < 4; k++) {
                 if (j < shapeData.size && k < shapeData.size && shapeData.rotates[0][j][k]) {
                     printf("\x1b[%dm  ", shapeData.color);
@@ -347,6 +350,8 @@ void printCanvas(Block canvas[CANVAS_HEIGHT][CANVAS_WIDTH], State* state)
             }
         }
     }
+    printf("\033[%d;%dHScore: %d", 2, CANVAS_WIDTH * 2 + 5, state->score);
+    
     return;
 }
 
@@ -448,6 +453,7 @@ void logic(Block canvas[CANVAS_HEIGHT][CANVAS_WIDTH], State* state)
     }
     return;
 }
+
 
 int main()
 {
