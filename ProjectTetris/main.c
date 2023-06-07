@@ -8,7 +8,7 @@
 #define RIGHT_KEY 0x27    // The key to move right, default = 0x27 (right arrow)
 #define ROTATE_KEY 0x26   // The key to rotate, default = 0x26 (up arrow)
 #define DOWN_KEY 0x28     // The key to move down, default = 0x28 (down arrow)
-#define FALL_KEY 0x20     // The key to fall, default = 0x20 (spacebar)
+#define HOLD_KEY 0x20     // The key to fall, default = 0x20 (spacebar)
 
 #define FALL_DELAY 300    // The delay between each fall, default = 500
 #define RENDER_DELAY 100  // The delay between each frame, default = 100
@@ -17,7 +17,7 @@
 #define RIGHT_FUNC() GetAsyncKeyState(RIGHT_KEY) & 0x8000
 #define ROTATE_FUNC() GetAsyncKeyState(ROTATE_KEY) & 0x8000
 #define DOWN_FUNC() GetAsyncKeyState(DOWN_KEY) & 0x8000
-#define FALL_FUNC() GetAsyncKeyState(FALL_KEY) & 0x8000
+#define HOLD_FUNC() GetAsyncKeyState(HOLD_KEY) & 0x8000
 
 #define CANVAS_WIDTH 15
 #define CANVAS_HEIGHT 20
@@ -359,7 +359,7 @@ void printCanvas(Block canvas[CANVAS_HEIGHT][CANVAS_WIDTH], State* state)
     printf("\033[%d;%dH  ↑   :Rotate", 14, CANVAS_WIDTH * 2 + 9);
     printf("\033[%d;%dH←   → :Left/Right", 15, CANVAS_WIDTH * 2 + 9);
     printf("\033[%d;%dH  ↓   :Fall down", 16, CANVAS_WIDTH * 2 + 9);
-    printf("\033[%d;%dH SPACE:Temporary Stop", 18, CANVAS_WIDTH * 2 + 9);
+    printf("\033[%d;%dH SPACE:Hold", 18, CANVAS_WIDTH * 2 + 9);
     
     return;
 }
@@ -430,7 +430,7 @@ void logic(Block canvas[CANVAS_HEIGHT][CANVAS_WIDTH], State* state)
         //state->fallTime = FALL_DELAY;
         state->fallTime += FALL_DELAY * CANVAS_HEIGHT;
     }
-    else if (FALL_FUNC()) {
+    else if (HOLD_FUNC()) {
         state->fallTime = 0;
     }
 
