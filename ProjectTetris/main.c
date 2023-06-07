@@ -324,22 +324,27 @@ void printCanvas(Block canvas[CANVAS_HEIGHT][CANVAS_WIDTH], State* state)
     
     printf("\033[0;0H\n");
     for (int i = 0; i < CANVAS_HEIGHT; i++) {
-        printf("|");
+        printf("▍");
         for (int j = 0; j < CANVAS_WIDTH; j++) {
             printf("\033[%dm\u3000", canvas[i][j].color);
         }
-        printf("\033[0m|\n");
+        printf("\033[0m ▍ \n");
     }
+     printf("\033[0m ▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔ \n");
 
     Shape shapeData = shapes[state->queue[1]];
-    printf("\033[%d;%dHNext:", 5, CANVAS_WIDTH * 2 + 5);
+    printf("\033[%d;%dH+-- NEXT --+", 1, CANVAS_WIDTH * 2 + 10);
+    for(int i = 0; i < 4 ; i++) {
+        printf("\033[%d;%dH|          |", 3+i, CANVAS_WIDTH * 2 + 10);
+    }
+    printf("\033[%d;%dH+----------+", 7, CANVAS_WIDTH * 2 + 10);
     
-    for (int i = 1; i <= 3; i++)
+    for (int i = 1; i <= 1; i++)
     {
         shapeData = shapes[state->queue[i]];
         
-        for (int j = 0; j < 4; j++) {
-            printf("\033[%d;%dH", i * 6 + j, CANVAS_WIDTH * 2 + 15);
+        for (int j = 0; j < 3; j++) {
+            printf("\033[%d;%dH", i * 4 + j, CANVAS_WIDTH * 2 + 13);
             for (int k = 0; k < 4; k++) {
                 if (j < shapeData.size && k < shapeData.size && shapeData.rotates[0][j][k]) {
                     printf("\x1b[%dm  ", shapeData.color);
@@ -350,7 +355,11 @@ void printCanvas(Block canvas[CANVAS_HEIGHT][CANVAS_WIDTH], State* state)
             }
         }
     }
-    printf("\033[%d;%dHScore: %d", 2, CANVAS_WIDTH * 2 + 5, state->score);
+    printf("\033[%d;%dHYour Score: %d", 10, CANVAS_WIDTH * 2 + 10, state->score);
+    printf("\033[%d;%dH  ↑   :Rotate", 14, CANVAS_WIDTH * 2 + 9);
+    printf("\033[%d;%dH←   → :Left/Right", 15, CANVAS_WIDTH * 2 + 9);
+    printf("\033[%d;%dH  ↓   :Fall down", 16, CANVAS_WIDTH * 2 + 9);
+    printf("\033[%d;%dH SPACE:Temporary Stop", 18, CANVAS_WIDTH * 2 + 9);
     
     return;
 }
