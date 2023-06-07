@@ -427,10 +427,11 @@ void logic(Block canvas[CANVAS_HEIGHT][CANVAS_WIDTH], State* state)
         }
     }
     else if (DOWN_FUNC()) {
-        state->fallTime = FALL_DELAY;
+        //state->fallTime = FALL_DELAY;
+        state->fallTime += FALL_DELAY * CANVAS_HEIGHT;
     }
     else if (FALL_FUNC()) {
-        state->fallTime += FALL_DELAY * CANVAS_HEIGHT;
+        state->fallTime = 0;
     }
 
     state->fallTime += RENDER_DELAY;
